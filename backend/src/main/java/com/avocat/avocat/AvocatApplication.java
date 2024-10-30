@@ -1,13 +1,11 @@
-package com.avocato.avocat;
+package com.avocat.avocat;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class AvocatApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(AvocatApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(AvocatApplication.class, args);
+    }
 }
