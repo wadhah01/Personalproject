@@ -41,7 +41,7 @@ public class AuthController {
                                  .body("Invalid OTP. Please try again.");
         }
     }
-    
+
     @PostMapping("/verify-otp")
     public ResponseEntity<String> verifyOtp(@RequestParam String username, @RequestParam String otp) {
         boolean isValidOtp = userService.verifyOtp(username, otp);
@@ -50,5 +50,27 @@ public class AuthController {
         } else {
             return ResponseEntity.badRequest().body("Invalid OTP");
         }
+    }
+    @RequestMapping("/api/auth")
+public class AuthController {
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) {
+        User user = userService.findByUsername(username);
+        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+            // If the password is correct, generate a JWT token
+            String token = jwtUtil.generateToken(username);
+            return ResponseEntity.ok(new AuthResponse(token));  // Use AuthResponse class to return token in JSON format
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
     }
 }
