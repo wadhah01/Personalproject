@@ -3,14 +3,18 @@ package com.avocat.avocat.service;
 import com.avocat.avocat.model.User;
 import com.avocat.avocat.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
@@ -33,18 +37,25 @@ public class UserService {
     }
 
     public String sendOtp(String username) {
-        // Generate a random OTP
-        String otp = String.valueOf((int)(Math.random() * 9000) + 1000);
-        // Save the OTP with the username for verification
-        otpStore.put(username, otp);
+        String otp = String.valueOf((int)(Math.random() * 9000) + 1000); // Generate a random OTP
+        otpStore.put(username, otp); // Save the OTP for verification
 
-        // Here, you should integrate your email service to send the OTP
         // For demonstration, we're just returning the OTP
-        return otp; // Change this to actually send the OTP via email
+        return otp; // Replace this with actual email OTP sending logic
     }
 
     public boolean verifyOtp(String username, String otp) {
         String storedOtp = otpStore.get(username);
         return storedOtp != null && storedOtp.equals(otp);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(), user.getPassword(), Collections.emptyList());
     }
 }

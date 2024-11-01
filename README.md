@@ -1,5 +1,5 @@
 
-# Avocat Application
+# full stack Application
 
 ## Overview
 This is a Spring Boot application for user authentication and CRUD operations.
