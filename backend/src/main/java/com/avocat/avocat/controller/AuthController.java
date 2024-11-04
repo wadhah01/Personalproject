@@ -51,6 +51,8 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Invalid OTP");
         }
     }
+    
+    @RestController
     @RequestMapping("/api/auth")
 public class AuthController {
 
