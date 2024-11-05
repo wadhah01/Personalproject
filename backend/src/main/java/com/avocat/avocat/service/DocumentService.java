@@ -31,4 +31,14 @@ public class DocumentService {
     public List<Document> getDocumentsByClientFullName(String clientFullName) {
         return documentRepository.findByClientFullName(clientFullName);
     }
+
+@Service
+public class DocumentService {
+
+    @Autowired
+    private DocumentRepository documentRepository;
+
+    public List<Document> searchDocumentsByClientName(String clientFullName) {
+        return documentRepository.findByClientFullName(clientFullName);
+    }
 }

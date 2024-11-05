@@ -31,9 +31,16 @@ public class DocumentController {
     }
 
     // Endpoint to retrieve documents by client's full name
-    @GetMapping("/search")
-    public ResponseEntity<List<Document>> getDocumentsByClientFullName(@RequestParam String clientFullName) {
-        List<Document> documents = documentService.getDocumentsByClientFullName(clientFullName);
-        return ResponseEntity.ok(documents);
-    }
+
+    @RestController
+    @RequestMapping("/api/documents")
+    public class DocumentController {
+    
+        @Autowired
+        private DocumentService documentService;
+    
+        @GetMapping("/search")
+        public List<Document> searchDocuments(@RequestParam String clientFullName) {
+            return documentService.searchDocumentsByClientName(clientFullName);
+        }
 }
