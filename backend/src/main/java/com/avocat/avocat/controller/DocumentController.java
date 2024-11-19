@@ -41,6 +41,6 @@ public class DocumentController {
     
         @GetMapping("/search")
         public List<Document> searchDocuments(@RequestParam String clientFullName) {
-            return documentService.searchDocumentsByClientName(clientFullName);
+            return documentService.searchDocumentsByClientFullName(clientFullName);
         }
 }
