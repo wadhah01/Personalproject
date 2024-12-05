@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Users, Briefcase, FileText, Clock } from 'lucide-react';
+import NewClientForm from './NewClientForm';
+import NewCaseForm from './NewCaseForm';
+import { mockClients } from '../data/mockData';
 
 const stats = [
   { name: 'Total Clients', value: '128', icon: Users },
@@ -30,6 +33,21 @@ const recentActivity = [
 ];
 
 export default function Dashboard() {
+  const [showNewClientForm, setShowNewClientForm] = useState(false);
+  const [showNewCaseForm, setShowNewCaseForm] = useState(false);
+
+  const handleNewClient = (clientData: { name: string; email: string; phone: string }) => {
+    // In a real app, this would make an API call
+    console.log('New client:', clientData);
+    alert('Client added successfully!');
+  };
+
+  const handleNewCase = (caseData: { title: string; clientId: string; status: 'active' | 'pending' }) => {
+    // In a real app, this would make an API call
+    console.log('New case:', caseData);
+    alert('Case added successfully!');
+  };
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -92,15 +110,14 @@ export default function Dashboard() {
           </div>
           <div className="p-6 grid grid-cols-2 gap-4">
             {[
-              { name: 'New Client', icon: Users },
-              { name: 'New Case', icon: Briefcase },
-              { name: 'Upload Document', icon: FileText },
-              { name: 'Schedule Meeting', icon: Clock },
+              { name: 'New Client', icon: Users, onClick: () => setShowNewClientForm(true) },
+              { name: 'New Case', icon: Briefcase, onClick: () => setShowNewCaseForm(true) },
             ].map((action) => {
               const Icon = action.icon;
               return (
                 <button
                   key={action.name}
+                  onClick={action.onClick}
                   className="flex flex-col items-center justify-center p-4 border-2 border-gray-200 rounded-lg hover:border-indigo-500 hover:text-indigo-500 transition-colors duration-200"
                 >
                   <Icon className="h-6 w-6 mb-2" />
@@ -111,6 +128,20 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {showNewClientForm && (
+        <NewClientForm
+          onClose={() => setShowNewClientForm(false)}
+          onSubmit={handleNewClient}
+        />
+      )}
+
+      {showNewCaseForm && (
+        <NewCaseForm
+          onClose={() => setShowNewCaseForm(false)}
+          onSubmit={handleNewCase}
+        />
+      )}
     </div>
   );
 }
